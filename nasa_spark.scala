@@ -1,4 +1,7 @@
-val rdd = sc.textFile("/home/lin/1_training/nasa/*.gz")
+import org.apache.spark.sql.types._
+import org.apache.spark.sql.functions._
+
+val rdd = sc.textFile("./data/NASA_*.gz")
 
 // regex
 val REG = """(.+) - - \[(.+)\] \"(.+)\" (\d+) (.+)""".r
@@ -31,9 +34,9 @@ println("===== Top 5 erros 404 =====")
 df404.groupBy("hostnames").count.sort($"count".desc).show(5)
 
 
-println("===== Quant erros 404 por dia ======")
+println("===== Qtd de erros 404 por dia ======")
 df404.withColumn("datas", $"date".substr(0,11)).groupBy("datas").count.sort($"datas".asc).show(100)
 
 
-println("===== Quant bytes retornados =====")
+println("===== Qtd de bytes retornados =====")
 df.select(sum("size").alias("total")).show
